@@ -1,0 +1,13 @@
+{
+  "name": "sjzt-booknavi",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "createMap":"node ./src/lib/createMap.js",
+    "createStaticMap":"node ./src/lib/createStaticMap.js"
+  },
+  "author": "",
+  "license": "ISC"
+}
