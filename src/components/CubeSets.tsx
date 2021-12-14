@@ -1,6 +1,6 @@
 import * as assets from '../assets';
 
-import {BookshelfCubeSchema, BookshelfType} from '../Schema';
+import {BookshelfCubeSchema, BookshelfType} from '../types/Schema';
 import {
     Image,
     ImageSourcePropType,
@@ -48,9 +48,7 @@ const BookshelfCube = ({
     shelfNum,
     direction,
 }: BookshelfCubeSchema) => {
-    const {
-        dispatch
-    } = useContext(globalState);
+    const {dispatch} = useContext(globalState);
     /**
      * 根据bsType读取不同的资源目录
      */
@@ -84,8 +82,8 @@ const BookshelfCube = ({
     return (
         <TouchableOpacity
             activeOpacity={activeFlag ? 0.9 : 1}
-            onPress={()=>{
-                dispatch({type:"SHOW_LAYER"})
+            onPress={() => {
+                dispatch({type: 'SHOW_LAYER'});
             }}
             style={{
                 position: 'absolute',
@@ -123,20 +121,17 @@ const BookshelfCube = ({
     );
 };
 
-const CubeSets = ({shelfNum, direct}) => {
+const CubeSets = () => {
     //每一个图书馆对应着一份地图配置
     //获取2.5D地图配置 -> 初始化时获取 -> 外部传入(不需要重复请求)
     const {
         state: {
-            curShelfNum,
             containerStyle: {width: containerWidth, height: containerHeight},
             mapConfig,
         },
-        dispatch,
     } = useContext(globalState);
     let cubeBoxContainerSize = useMemo(() => {
         let count = mapConfig.elements.length;
-
         let lastEl = mapConfig.elements[count - 1];
         let firstEl = mapConfig.elements[0];
         return {
@@ -163,7 +158,6 @@ const CubeSets = ({shelfNum, direct}) => {
             height: containerHeight,
         });
         let cubeBoxCp = calcuCenterPoint(cubeBoxContainerSize);
-        console.log(cubeBoxContainerSize);
         return {
             left:
                 containerWidth - cubeBoxContainerSize.width < 0
@@ -172,7 +166,7 @@ const CubeSets = ({shelfNum, direct}) => {
             top: containerCP.y - cubeBoxCp.y,
         };
     }, []);
-    console.log(calcuOffsetforCenter);
+    // console.log(calcuOffsetforCenter);
     /**
      * 检测当前尺寸是否超出容器尺寸，如果超出返回scale值
      */
@@ -184,20 +178,9 @@ const CubeSets = ({shelfNum, direct}) => {
     //根据地图配置渲染
     const renderCube = () => {
         return mapConfig.elements.map((cube, index) => {
-            if (cube.shelfNum === curShelfNum) {
-                cube.currentFlag = true;
-            }
-            if (cube.shelfNum === shelfNum) {
-                cube.activeFlag = true;
-                cube.direction = direct;
-            }
-            return (
-                <BookshelfCube
-                    {...cube}
-                    key={`cube${index}`}
-                />
-            );
-        })}
+            return <BookshelfCube {...cube} key={`cube${index}`} />;
+        });
+    };
     return (
         <View
             style={{

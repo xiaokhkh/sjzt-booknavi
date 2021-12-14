@@ -29,4 +29,5 @@ export default {
 	NaviFront_5: require('./front_5.png'),
 	NaviFront_6: require('./front_6.png'),
 	select: require('./select.png'),
+	desk: require('./desk.png'),
 };

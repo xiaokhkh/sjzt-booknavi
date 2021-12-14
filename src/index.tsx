@@ -1,29 +1,24 @@
 import React, {useContext, useEffect} from 'react';
 import {StyleSheet, View} from 'react-native';
 
-import {
-    BookLocationSchema,
-} from './Schema';
 import ShowLayer from './components/ShowLayer';
 import ShowMap from './components/ShowMap';
 import {globalState} from './state/context';
 
-type Props = {
-    mapShow: number;
-    bookLocation: BookLocationSchema;
-};
-const BookNavi = ({bookLocation}:Props) => {
+const BookNavi = () => {
     const {
         state: {
-			containerStyle,
+            containerStyle,
             curShelfNum,
-            mapShow = true,
+            mapShow,
             mapConfig,
-        },dispatch
+            location: {shelfNum, direct},
+        },
+        dispatch,
     } = useContext(globalState);
-	const {shelfNum, direct} = bookLocation;
-    useEffect(()=>{
-        mapConfig.elements.forEach((cube,index) => {
+    useEffect(() => {
+        //将书籍所在书架选中
+        mapConfig.elements.forEach((cube, index) => {
             if (cube.shelfNum === curShelfNum) {
                 cube.currentFlag = true;
             }
@@ -32,19 +27,18 @@ const BookNavi = ({bookLocation}:Props) => {
                 cube.direction = direct;
                 dispatch({
                     type: 'SET_ACTIVE',
-                    active: {bsType: cube.bsType, column: cube.column},
+                    active:{
+                        bsType:cube.bsType,
+                        column:cube.column
+                    },
                 });
             }
-        }); 
-    }, [mapConfig])
-    
+        });
+        dispatch({type: 'SET_MAPCONFIG', mapConfig: mapConfig});
+    }, []);
     return (
         <View style={[styles.bookNavi, {...containerStyle}]}>
-            {mapShow ? (
-                <ShowMap shelfNum = {shelfNum} direct = {direct}/>
-            ) : (
-                <ShowLayer bookLocation = {bookLocation}/>
-            )}
+            {mapShow ? <ShowMap /> : <ShowLayer />}
         </View>
     );
 };

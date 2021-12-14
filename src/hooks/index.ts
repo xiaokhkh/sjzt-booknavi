@@ -2,6 +2,7 @@
 
 import {useContext, useMemo} from 'react';
 
+import {createMapConfig} from '../ModuleConfig'
 import {globalState} from '../state/context';
 
 /**
@@ -28,4 +29,13 @@ export function useCheckOverSize (curWidth:number, curHeight:number, delay:numbe
         return scale;
     }, [containerWidth, containerHeight, curWidth, curHeight]);
 
+}
+/**
+ * 根据输入的librarycode输入相应的mapConfig
+ */
+export function useMapConfig(libraryCode){
+    return useMemo(()=>{
+        //根据libraryCode请求相应的接口，获取mapconfig缓存并返回
+        return createMapConfig(libraryCode);
+    }, [libraryCode])
 }

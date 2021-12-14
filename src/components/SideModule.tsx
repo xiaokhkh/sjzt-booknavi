@@ -1,8 +1,9 @@
-import {Image, StyleSheet, Text, View} from 'react-native';
-import React, {useCallback, useContext, useMemo} from 'react';
-import {SideModuleSchema, SideModuleType} from '../Schema';
+import {Animated, Image, StyleSheet, Text, View} from 'react-native';
+import {BookshelfType, SideModuleSchema, SideModuleType} from '../types/Schema';
+import React, {useContext, useEffect, useMemo} from 'react';
 
-import {bookshelfConfig} from './ModuleConfig';
+import CustomAnimate from '../Animated';
+import {bookshelfConfig} from '../ModuleConfig';
 import {common} from '../assets';
 import {globalState} from '../state/context';
 
@@ -23,27 +24,38 @@ const SelectLayer: ({type: SideModuleType, column: number}) => JSX.Element = ({
         style = styles.basic;
     }
     return (
-        <>
-            <View style={styles.selectedBox}>
+            <View style={[styles.selectedBox]}>
                 <View style={style} />
                 <Text style={[styles.selectedText, {opacity: 0.8}]}>
                     {text}
                 </Text>
             </View>
-        </>
     );
 };
+/** */
 const Module: ({type: SideModuleType, index: number}) => JSX.Element = ({
     type,
     index,
 }) => {
     const {
-        state: {active:{
-            bsType,
-            column
-        }},
+        state: {
+            active: {bsType},
+        },
     } = useContext(globalState);
-
+    /**
+     * 给定位模块用的，标示是哪列
+     */
+    let column = useMemo(() => {
+        if (bsType === BookshelfType.Desk) {
+            if(index > 5 && index < 18){
+                return Math.floor(index / bookshelfConfig[bsType].layerHeight) + 2;
+            }else{
+                return index > 5? 5 : 1;
+            }
+        } else {
+            return index / bookshelfConfig[bsType].layerHeight;
+        }
+    }, [bsType, index]);
     const selectBoxShow = useMemo(() => {
         return (
             type === SideModuleType.BASIC ||
@@ -51,53 +63,48 @@ const Module: ({type: SideModuleType, index: number}) => JSX.Element = ({
         );
     }, [type]);
     const randomImage = useMemo(() => {
+        if (type === SideModuleType.DESK) {
+            return `desk`;
+        }
         const randomIntegerInRange: (min: number, max: number) => number = (
             min,
             max,
         ) => Math.floor(Math.random() * (max - min + 1)) + min;
         return `NaviFront_${randomIntegerInRange(1, 6)}`;
     }, []);
+
     return (
         <>
-            {selectBoxShow ? (
-                <SelectLayer
-                    type={type}
-                    column={index / bookshelfConfig[bsType].layerHeight}
-                />
-            ) : null}
+            {/* <Text
+                style={{
+                    position: 'absolute',
+                    fontSize: 24,
+                    color: '#000',
+                    zIndex: 99999,
+                }}>
+                {index}
+            </Text> */}
+            {selectBoxShow ? <SelectLayer type={type} column={column} /> : null}
             <Image source={common[randomImage]} />
         </>
     );
 };
 const SideModule: ({item, index}: Props) => JSX.Element = ({item, index}) => {
-    const {
+    console.log(index)
+    let {
         state: {
             ModuleSize: {width, height},
         },
     } = useContext(globalState);
-
-    const renderItem = useCallback((type, index) => {
-        switch (type) {
-            case SideModuleType.SideModule:
-                return <Module type={type} index={index} />;
-            case SideModuleType.BASIC:
-                return (
-                    <>
-                        <Module type={type} index={index} />
-                    </>
-                );
-            case SideModuleType.ACTIVESideModule:
-                return (
-                    <>
-                        <Module type={type} index={index} />
-                    </>
-                );
-            default:
-                break;
-        }
-    }, []);
-
-    return <View style={{width, height}}>{renderItem(item.type, index)}</View>;
+    if (item.type === SideModuleType.DESK) {
+        width = item.width;
+        height = item.height;
+    }
+    return (
+        <View style={{width, height}}>
+            <Module type={item.type} index={index} />
+        </View>
+    );
 };
 const styles = StyleSheet.create({
     selectedBox: {

@@ -1,35 +1,54 @@
-import React, {useReducer} from 'react';
-import {globalState, initState, reducer} from './src/state/context';
+import React, {useEffect, useReducer} from 'react';
+import {globalState, init, reducer} from './src/state/context';
 
+import BookNavi from './src';
 import {GestureHandlerRootView} from 'react-native-gesture-handler';
-import { mapConfig } from './src/components/ModuleConfig';
+import {useMapConfig} from './src/hooks';
 
-const BookNaviContainer = ({
-    libraryCode,
-    curShelfNum, 
-    containerStyle,
-    children,
+const BookNaviReactNative = ({
+    mapConfig,
+    location = {
+        column: 1,
+        layer: 1,
+        shelfNum: 1, //书籍所在书架号
+        direct: 'A',
+    },
+    curShelfNum = 0,
+    containerStyle = {
+        width: 800,
+        height: 800,
+        backgroundColor: '#f2f2f2',
+    },
+    mapShow,
 }) => {
-    //根据libraryCode去请求地图配置
-
-
-    Object.assign(initState, {
+    let receiveProps = {
+        mapConfig,
+        location,
         curShelfNum,
         containerStyle,
-        ModuleSize:{
-            width:180,
-            height:61
-        },
-        mapConfig
-    })
-    const [state, dispatch] = useReducer(reducer, initState);
+    };
+    const [state, dispatch] = useReducer(reducer, receiveProps, init);
+    useEffect(() => {
+        if (mapShow) {
+            dispatch({
+                type: 'SHOW_MAP',
+            });
+        } else {
+            dispatch({
+                type: 'SHOW_LAYER',
+            });
+        }
+    }, [mapShow]);
+    useEffect(() => {
+        dispatch({type: 'SET_LOCATION', location: location});
+    }, [location]);
     return (
         <GestureHandlerRootView>
             <globalState.Provider value={{state, dispatch}}>
-                {children}
+                <BookNavi />
             </globalState.Provider>
         </GestureHandlerRootView>
     );
 };
 
-export {BookNaviContainer};
+export {BookNaviReactNative, useMapConfig};

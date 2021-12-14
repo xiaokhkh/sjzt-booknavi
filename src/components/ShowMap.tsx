@@ -4,14 +4,10 @@ import Controllers from './Controllers';
 import CubeSets from './CubeSets';
 import React from 'react';
 
-interface Props {
-  shelfNum:number,
-  direct:string,
-}
-const ShowMap = ({shelfNum, direct}: Props) => {
+const ShowMap = () => {
   return (
       <Controllers >
-        <CubeSets shelfNum = {shelfNum} direct = {direct}/>
+        <CubeSets />
       </Controllers>
   );
 };
