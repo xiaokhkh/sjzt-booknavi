@@ -68,16 +68,17 @@ function generatorLayersMap(
         ) => {
             //
             const {type: bsType, layerHeight} = config;
-            const layers = layerHeight * column - 14; 22
-            LayersMap[bsType + column] = fillArray(layers, (index:number) => {
-                if(index == 2 || index == 11 || index == 19){
+            const layers = layerHeight * column - 14;
+            22;
+            LayersMap[bsType + column] = fillArray(layers, (index: number) => {
+                if (index == 2 || index == 11 || index == 19) {
                     return basic;
                 }
-                if(index == 5 || index == 22){
-                    return desk
+                if (index == 5 || index == 22) {
+                    return desk;
                 }
                 return normal;
-            })
+            });
         };
         //生成对应的SideModuleSchema
         const fillArray: (
@@ -225,17 +226,48 @@ function createMapConfig(libraryCode) {
         bsType: BookshelfType.Four, //根据不同的bsType及column选择不同的assetsPath
         column: 6,
     };
-    if (libraryCode === '阜康') {
+    const bookshelfAtSixColumn2: BookshelfCubeSchema = {
+        base: {
+            id: 0,
+            coord: {x: 0, y: 0},
+            cubeWidth: 274,
+            cubeHeight: 266,
+            priority: 1,
+            type: CubeType.BOOKSHELF,
+        },
+        currentFlag: false,
+        activeFlag: false,
+        shelfNum: 1,
+        direction: 'A',
+        bsType: BookshelfType.Six, //根据不同的bsType及column选择不同的assetsPath
+        column: 2,
+    };
+
+
+
+
+
+
+
+    if (libraryCode === '65b0758681ea6cbb533a961c5eb75e02') {
         mapConfig.elements.push(
+        //阜康图书馆
             ...generateCubeSet(4, 4, 20, 20, bookshelfAtSix),
         );
-    } else if (libraryCode === '四层') {
+    } else if (libraryCode === '746573744c6962') {
+        //智图办公区测试
         mapConfig.elements.push(
-            ...generateCubeSet(4, 4, 20, 20, bookshelfAtFour),
+            ...generateCubeSet(2, 2, 20, 20, bookshelfAtSixColumn2),
         );
-    } else if (libraryCode === '新疆省') {
+    } else if (libraryCode === '56db5c424e008282') {
+        //4节1层测试用
         mapConfig.elements.push(
-            ...generateCubeSet(4, 4, 28, 20, bookshelfAtDesk),
+            ...generateCubeSet(1, 1, 20, 20, {...bookshelfAtFour, column:1}),
+        );
+    } else if (libraryCode === '65b075867701') {
+        //新疆省图书馆
+        mapConfig.elements.push(
+            ...generateCubeSet(3, 3, 28, 20, bookshelfAtDesk),
         );
     }
     return mapConfig;

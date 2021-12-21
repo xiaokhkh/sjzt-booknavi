@@ -53,6 +53,7 @@ const BookshelfCube = ({
      * 根据bsType读取不同的资源目录
      */
     const asset = assets[`bs_${bsType + column}`];
+    const BI = 1.3;
     let directionLocation = {
         top: -25,
         left: 0,
@@ -78,6 +79,18 @@ const BookshelfCube = ({
             top: -36,
             left: 20,
         };
+    }else if(bsType === BookshelfType.Six && column === 2){
+        shelfNumLocation = {
+            top: 9.5 * 10,
+            left: 16.2 * 10,
+        };
+        currentLocation = {
+            top: 20,
+            left:50,
+        };
+        // directionLocation = {
+        //     top: -36,
+        // };
     }
     return (
         <TouchableOpacity
@@ -143,11 +156,18 @@ const CubeSets = () => {
             ),
         };
     }, [mapConfig]);
+    /**
+     * 检测当前尺寸是否超出容器尺寸，如果超出返回scale值
+     */
+     let scale = useCheckOverSize(
+        cubeBoxContainerSize.width,
+        cubeBoxContainerSize.height,
+        0,
+    );
     //将cubebox居中
     let calcuOffsetforCenter = useMemo(() => {
-        const calcuCenterPoint = obj => {
+        const calcuCenterPoint = ({width, height}) => {
             //w:1000, h:500, x:500, y:250
-            const {width, height} = obj;
             return {
                 x: width / 2,
                 y: height / 2,
@@ -157,24 +177,16 @@ const CubeSets = () => {
             width: containerWidth,
             height: containerHeight,
         });
-        let cubeBoxCp = calcuCenterPoint(cubeBoxContainerSize);
+        const {width, height} = cubeBoxContainerSize;
+        let cubeBoxCp = calcuCenterPoint({width:width*scale, height:height*scale});
         return {
             left:
                 containerWidth - cubeBoxContainerSize.width < 0
                     ? 0
                     : containerCP.x - cubeBoxCp.x,
-            top: containerCP.y - cubeBoxCp.y,
+            top: (containerCP.y - cubeBoxCp.y),
         };
     }, []);
-    // console.log(calcuOffsetforCenter);
-    /**
-     * 检测当前尺寸是否超出容器尺寸，如果超出返回scale值
-     */
-    let scale = useCheckOverSize(
-        cubeBoxContainerSize.width,
-        cubeBoxContainerSize.height,
-        0,
-    );
     //根据地图配置渲染
     const renderCube = () => {
         return mapConfig.elements.map((cube, index) => {

@@ -71,8 +71,9 @@ const ShowLayer = () => {
     //两列两层渲染
     const renderDeskColumn = useCallback(
         (deskColumn: SideModuleSchema[], realIndex) => {
+            console.log(`renderDeskColumn${realIndex}`)
             return (
-                <View key={`renderDeskColumn${realIndex}`}>
+                <>
                     <View
                         style={{
                             flexDirection: 'column',
@@ -83,7 +84,7 @@ const ShowLayer = () => {
                         {deskColumn.map((item, index) => {
                             realIndex += 1;
                             if (item.type === SideModuleType.DESK) {
-                                return <></>;
+                                return null;
                             }
                             return (
                                 <SideModule
@@ -99,7 +100,7 @@ const ShowLayer = () => {
                         index={realIndex}
                         key={`desk${realIndex}`}
                     />
-                </View>
+                </>
             );
         },
         [],
@@ -129,7 +130,7 @@ const ShowLayer = () => {
                     flag = false;
                 }
                 return (
-                    <>
+                    <React.Fragment key={`desk${outIndex}`}>
                         {renderDeskColumn(outItem, realIndex)}
                         {flag &&
                             tempMap.map((item, index) => {
@@ -143,7 +144,7 @@ const ShowLayer = () => {
                                     />
                                 );
                             })}
-                    </>
+                    </React.Fragment>
                 );
             });
         }

@@ -90,7 +90,6 @@ const Module: ({type: SideModuleType, index: number}) => JSX.Element = ({
     );
 };
 const SideModule: ({item, index}: Props) => JSX.Element = ({item, index}) => {
-    console.log(index)
     let {
         state: {
             ModuleSize: {width, height},

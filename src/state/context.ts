@@ -42,6 +42,8 @@ const reducer = (state: InitState, action) => {
             return {...state, mapShow: true, btnText: '去场景地图'};
         case 'SHOW_LAYER':
             return {...state, mapShow: false, btnText: '去书架正面'};
+        case 'SWITCH':
+            return {...state, mapShow:!state.mapShow}
         case 'SET_MAPCONFIG':
             return {...state, mapConfig: action.mapConfig};
         case 'SET_ACTIVE':
@@ -56,8 +58,9 @@ const reducer = (state: InitState, action) => {
 };
 const globalState = React.createContext({state: initState, dispatch: null});
 function init(receiveState) {
+    console.log(receiveState)
     return {
-        ...Object.assign(initState, receiveState),
+        ...initState, ...receiveState
     };
 }
 export {globalState, reducer, init, initState};

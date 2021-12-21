@@ -18,7 +18,9 @@ const BookNavi = () => {
     } = useContext(globalState);
     useEffect(() => {
         //将书籍所在书架选中
-        mapConfig.elements.forEach((cube, index) => {
+        let mapConfigCopy = mapConfig.elements.map((cube, index) => {
+            cube.currentFlag = false;
+            cube.activeFlag = false;
             if (cube.shelfNum === curShelfNum) {
                 cube.currentFlag = true;
             }
@@ -27,15 +29,17 @@ const BookNavi = () => {
                 cube.direction = direct;
                 dispatch({
                     type: 'SET_ACTIVE',
-                    active:{
-                        bsType:cube.bsType,
-                        column:cube.column
+                    active: {
+                        bsType: cube.bsType,
+                        column: cube.column,
                     },
                 });
             }
+            return cube
         });
-        dispatch({type: 'SET_MAPCONFIG', mapConfig: mapConfig});
-    }, []);
+
+        dispatch({type: 'SET_MAPCONFIG', mapConfig: {elements:mapConfigCopy}});
+    }, [shelfNum, direct]);
     return (
         <View style={[styles.bookNavi, {...containerStyle}]}>
             {mapShow ? <ShowMap /> : <ShowLayer />}
