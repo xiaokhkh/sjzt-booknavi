@@ -101,7 +101,7 @@ const BookshelfCube = ({
         <TouchableOpacity
             activeOpacity={activeFlag ? 0.9 : 1}
             onPress={() => {
-                dispatch({ type: 'SHOW_LAYER' });
+                dispatch({type:'SWITCH'});
             }}
             style={{
                 position: 'absolute',
