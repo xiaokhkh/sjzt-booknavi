@@ -56,4 +56,4 @@ const BookNaviReactNative = React.forwardRef(
 	}
 );
 
-export { BookNaviReactNative, useMapConfig };
+export { BookNaviReactNative };

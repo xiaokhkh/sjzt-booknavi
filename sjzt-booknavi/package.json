@@ -1,6 +1,5 @@
 {
   "_from": "sjzt-booknavi",
-  "_id": "sjzt-booknavi@1.0.1",
   "_inBundle": false,
   "_integrity": "sha512-bTe8fSFO3X7S3bfRHFOclkOrwwcfs6efrdGdj+8/xIxmob67h/NJTMM3Iyapu/6WJ+eQQ+UOs3K6Er9akEuGQA==",
   "_location": "/sjzt-booknavi",
@@ -37,5 +36,5 @@
     "createStaticMap": "node ./src/lib/createStaticMap.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "version": "1.0.0"
+  "version": "1.0.1"
 }
