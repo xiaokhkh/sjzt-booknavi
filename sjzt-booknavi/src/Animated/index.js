@@ -2,6 +2,7 @@ import { Animated, Easing } from 'react-native';
 
 export default class CreateAnimate {
     constructor() {}
+
     timing(value, toValue, duration = 500) {
         return Animated.timing(value, {
             toValue: toValue,
@@ -15,7 +16,7 @@ export default class CreateAnimate {
         let scale = new Animated.Value(1);
         let scaleAnimate = Animated.sequence([
             this.timing(scale, 1),
-            this.timing(scale, 0.9),
+            this.timing(scale, 0.9)
         ]);
         const runAnimated = () => {
             Animated.loop(scaleAnimate).start();

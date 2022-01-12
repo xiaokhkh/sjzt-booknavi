@@ -1,17 +1,19 @@
 import * as assets from '../assets';
 
-import {BookshelfCubeSchema, BookshelfType} from '../types/Schema';
 import {
+    Animated,
     Image,
     ImageSourcePropType,
     StyleSheet,
     TouchableOpacity,
-    View,
+    View
 } from 'react-native';
-import React, {useCallback, useContext, useMemo} from 'react';
+import { BookshelfCubeSchema, BookshelfType } from '../types/Schema';
+import React, { useContext, useEffect, useMemo, useRef } from 'react';
 
-import {globalState} from '../state/context';
-import {useCheckOverSize} from '../hooks';
+import CreateAnimate from '../Animated';
+import { globalState } from '../state/context';
+import { useCheckOverSize } from '../hooks';
 
 type DirectionProps = {
     sourceName: ImageSourcePropType;
@@ -29,18 +31,21 @@ const Direction = ({
     if (!activeFlag) {
         return <></>;
     }
+    let animated = new CreateAnimate();
+    const [scale, runAnimated] = animated.getScaleLoopAnimate()
+    runAnimated()
     return (
-        <Image
+        <Animated.Image
             source={sourceName}
             style={[
                 styles.directFloat,
-                {...directionLocation},
-                // {transform: [{scale: scale}]},
-            ]}></Image>
+                { ...directionLocation },
+                { transform: [{ scale: scale }] },
+            ]} />
     );
 };
 const BookshelfCube = ({
-    base: {cubeWidth, cubeHeight, coord, priority},
+    base: { cubeWidth, cubeHeight, coord, priority },
     bsType,
     column,
     currentFlag,
@@ -48,7 +53,7 @@ const BookshelfCube = ({
     shelfNum,
     direction,
 }: BookshelfCubeSchema) => {
-    const {dispatch} = useContext(globalState);
+    const { dispatch } = useContext(globalState);
     /**
      * 根据bsType读取不同的资源目录
      */
@@ -79,14 +84,14 @@ const BookshelfCube = ({
             top: -36,
             left: 20,
         };
-    }else if(bsType === BookshelfType.Six && column === 2){
+    } else if (bsType === BookshelfType.Six && column === 2) {
         shelfNumLocation = {
             top: 9.5 * 10,
             left: 16.2 * 10,
         };
         currentLocation = {
             top: 20,
-            left:50,
+            left: 50,
         };
         // directionLocation = {
         //     top: -36,
@@ -96,7 +101,7 @@ const BookshelfCube = ({
         <TouchableOpacity
             activeOpacity={activeFlag ? 0.9 : 1}
             onPress={() => {
-                dispatch({type: 'SHOW_LAYER'});
+                dispatch({ type: 'SHOW_LAYER' });
             }}
             style={{
                 position: 'absolute',
@@ -108,14 +113,14 @@ const BookshelfCube = ({
             }}>
             {currentFlag ? (
                 <Image
-                    style={[styles.current, {...currentLocation}]}
+                    style={[styles.current, { ...currentLocation }]}
                     source={asset[`current`]}
                 />
             ) : (
                 <></>
             )}
             <Image
-                style={[styles.shelfNum, {...shelfNumLocation}]}
+                style={[styles.shelfNum, { ...shelfNumLocation }]}
                 source={assets[`common`][`bookshelfNum_${shelfNum}`]}
             />
             <Direction
@@ -127,7 +132,7 @@ const BookshelfCube = ({
             />
             <Image
                 source={asset[`${activeFlag ? 'active' : 'normal'}`]}
-                style={{top: 0, left: 0, width: '100%', height: '100%'}}
+                style={{ top: 0, left: 0, width: '100%', height: '100%' }}
                 resizeMode="contain"
             />
         </TouchableOpacity>
@@ -139,7 +144,7 @@ const CubeSets = () => {
     //获取2.5D地图配置 -> 初始化时获取 -> 外部传入(不需要重复请求)
     const {
         state: {
-            containerStyle: {width: containerWidth, height: containerHeight},
+            containerStyle: { width: containerWidth, height: containerHeight },
             mapConfig,
         },
     } = useContext(globalState);
@@ -151,22 +156,22 @@ const CubeSets = () => {
             width: lastEl.base.coord.x + lastEl.base.cubeWidth,
             height: Math.abs(
                 firstEl.base.coord.y +
-                    firstEl.base.cubeHeight +
-                    lastEl.base.coord.y,
+                firstEl.base.cubeHeight +
+                lastEl.base.coord.y,
             ),
         };
     }, [mapConfig]);
     /**
      * 检测当前尺寸是否超出容器尺寸，如果超出返回scale值
      */
-     let scale = useCheckOverSize(
+    let scale = useCheckOverSize(
         cubeBoxContainerSize.width,
         cubeBoxContainerSize.height,
         0,
     );
     //将cubebox居中
     let calcuOffsetforCenter = useMemo(() => {
-        const calcuCenterPoint = ({width, height}) => {
+        const calcuCenterPoint = ({ width, height }) => {
             //w:1000, h:500, x:500, y:250
             return {
                 x: width / 2,
@@ -177,8 +182,8 @@ const CubeSets = () => {
             width: containerWidth,
             height: containerHeight,
         });
-        const {width, height} = cubeBoxContainerSize;
-        let cubeBoxCp = calcuCenterPoint({width:width*scale, height:height*scale});
+        const { width, height } = cubeBoxContainerSize;
+        let cubeBoxCp = calcuCenterPoint({ width: width * scale, height: height * scale });
         return {
             left:
                 containerWidth - cubeBoxContainerSize.width < 0
@@ -203,7 +208,7 @@ const CubeSets = () => {
                 style={{
                     position: 'absolute',
                     ...calcuOffsetforCenter,
-                    transform: [{scale}],
+                    transform: [{ scale }],
                 }}>
                 {renderCube()}
             </View>

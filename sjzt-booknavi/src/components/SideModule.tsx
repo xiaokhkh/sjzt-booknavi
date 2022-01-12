@@ -1,8 +1,8 @@
 import {Animated, Image, StyleSheet, Text, View} from 'react-native';
 import {BookshelfType, SideModuleSchema, SideModuleType} from '../types/Schema';
-import React, {useContext, useEffect, useMemo} from 'react';
+import React, {useContext, useMemo} from 'react';
 
-import CustomAnimate from '../Animated';
+import CreateAnimate from '../Animated';
 import {bookshelfConfig} from '../ModuleConfig';
 import {common} from '../assets';
 import {globalState} from '../state/context';
@@ -15,6 +15,9 @@ const SelectLayer: ({type: SideModuleType, column: number}) => JSX.Element = ({
     type,
     column,
 }) => {
+    let animated = new CreateAnimate();
+    const [scale, runAnimated] = animated.getScaleLoopAnimate()
+    runAnimated()
     let text: string, style: object;
     if (type === SideModuleType.ACTIVESideModule) {
         text = '目标书籍';
@@ -25,7 +28,9 @@ const SelectLayer: ({type: SideModuleType, column: number}) => JSX.Element = ({
     }
     return (
             <View style={[styles.selectedBox]}>
-                <View style={style} />
+                <Animated.View style={[style,{
+                    transform:[{scale}]
+                }]} />
                 <Text style={[styles.selectedText, {opacity: 0.8}]}>
                     {text}
                 </Text>
