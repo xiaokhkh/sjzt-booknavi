@@ -60,7 +60,7 @@ const BookNavi = () => {
                     注：目标书架与当前书架为同一书架
                 </Text>
             </View>}
-            {renderTipBox}
+            {curShelfNum !== 100 && renderTipBox}
             {mapShow ? <ShowMap /> : <ShowLayer />}
         </View>
     );
