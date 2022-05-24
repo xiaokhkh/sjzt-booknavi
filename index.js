@@ -8,7 +8,7 @@ import { useMapConfig } from "./src/hooks";
 const BookNaviReactNative = React.forwardRef(
 	(
 		{
-            libraryCode,
+			libraryCode,
 			location = {
 				column: 1,
 				layer: 1,
@@ -20,13 +20,14 @@ const BookNaviReactNative = React.forwardRef(
 				width: 400,
 				height: 400,
 				backgroundColor: "#f2f2f2",
-			}
+			},
+			mapConfig,
 		},
 		ref
 	) => {
-        let mapConfig = useMapConfig(libraryCode);
+		let defaultMapConfig = useMapConfig(libraryCode);
 		let receiveProps = {
-			mapConfig,
+			mapConfig: mapConfig || defaultMapConfig,
 			location,
 			curShelfNum,
 			containerStyle,
@@ -35,17 +36,17 @@ const BookNaviReactNative = React.forwardRef(
 		useEffect(() => {
 			dispatch({ type: "SET_LOCATION", location: location });
 		}, [location]);
-        useImperativeHandle(
-            ref,
-            () => {
-                return {
-                    switch:()=>{
-                        dispatch({type:'SWITCH'})
-                    }
-                }
-            },
-            [],
-        )
+		useImperativeHandle(
+			ref,
+			() => {
+				return {
+					switch: () => {
+						dispatch({ type: "SWITCH" });
+					},
+				};
+			},
+			[]
+		);
 		return (
 			<GestureHandlerRootView>
 				<globalState.Provider value={{ state, dispatch }}>
