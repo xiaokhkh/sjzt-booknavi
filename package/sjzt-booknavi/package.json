@@ -1,0 +1,45 @@
+{
+	"_from": "sjzt-booknavi",
+	"_inBundle": false,
+	"_integrity": "sha512-bTe8fSFO3X7S3bfRHFOclkOrwwcfs6efrdGdj+8/xIxmob67h/NJTMM3Iyapu/6WJ+eQQ+UOs3K6Er9akEuGQA==",
+	"_location": "/sjzt-booknavi",
+	"_phantomChildren": {},
+	"_requested": {
+		"type": "tag",
+		"registry": true,
+		"raw": "sjzt-booknavi",
+		"name": "sjzt-booknavi",
+		"escapedName": "sjzt-booknavi",
+		"rawSpec": "",
+		"saveSpec": null,
+		"fetchSpec": "latest"
+	},
+	"_requiredBy": [
+		"#USER",
+		"/"
+	],
+	"_resolved": "https://registry.npmjs.org/sjzt-booknavi/-/sjzt-booknavi-1.0.0.tgz",
+	"_shasum": "ad5723b2e274745db29c65b5f3c12ba0179e2507",
+	"_spec": "sjzt-booknavi",
+	"_where": "D:\\Code\\smart-bookshelf-project\\components\\sjzt-booknavi\\example\\bookNaviDemo",
+	"author": {
+		"name": "konh"
+	},
+	"bundleDependencies": false,
+	"deprecated": false,
+	"description": "```javascript\r const App = () => {\r     //booknavi.switch()用来切换地图和侧面图\r     const booknavi = React.useRef(null);\r     //书籍的位置信息\r     let location = {\r         layer: 1,\r         column: 1,\r         shelfNum: 3,\r         direct: 'A',\r     }; \r     //容器属性\r     let containerStyle = {\r         width: 400,\r         height: 400,\r         backgroundColor: '#f2f2f2',\r     };\r     return (\r         <>\r             <BookNaviReactNative\r                 libraryCode=\"65b075867701\" //图书馆代码，不同的图书馆使用不同的地图配置\r                 location={location} \r                 containerStyle={containerStyle}\r                 ref={ref => {\r                     booknavi.current = ref;\r                 }}\r             />\r             <Button\r                 title=\"Switch\"\r                 onPress={() => {\r                     if (booknavi.current) {\r                         booknavi.current.switch();\r                     }\r                 }}\r             />\r         </>\r     );\r };\r ```",
+	"license": "ISC",
+	"main": "index.js",
+	"name": "sjzt-booknavi",
+	"scripts": {
+		"createMap": "node ./src/lib/createMap.js",
+		"createStaticMap": "node ./src/lib/createStaticMap.js",
+		"test": "echo \"Error: no test specified\" && exit 1"
+	},
+	"peerDependencies": {
+		"react-native": "^0.67",
+		"react-native-svg": "^12.1.0",
+		"react-native-gesture-handler": "^1.9.0"
+	},
+	"version": "1.1.5"
+}
